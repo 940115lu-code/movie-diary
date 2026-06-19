@@ -1,0 +1,3 @@
+把海報圖片放在這裡。
+命名建議：sorry-baby.jpg、project-hail-mary.jpg、backroom.jpg
+網站會優先找 movies.js 裡的 poster；沒有 poster 就會用電影 title 自動推測檔名。

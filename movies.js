@@ -10,8 +10,8 @@ const movies = [
     title: "Project Hail Mary",
     poster: "posters/project-hail-mary.jpg",
     date: "2026-03-18",
-    rating: 9.2,
-    review: "電影＆小說都給我去看"
+    rating: 9.3,
+    review: "不多說電影＆小說都給我去看, AMAZE!"
   },
   {
     title: "The Drama",
@@ -32,20 +32,20 @@ const movies = [
     poster: "posters/colony.jpg",
     date: "2026-05-23",
     rating: 8,
-    review: "殭屍片的新創意"
+    review: "很有創意的殭屍片, 反派塑造很厲害"
   },
   {
     title: "The Devil Wears Prada 2",
     poster: "posters/the-devil-wears-prada-2.jpg",
     date: "2026-04-29",
     rating: 7.8,
-    review: "經典的畫面重現, 眼睛耳朵都會有驚喜"
+    review: "經典畫面重現, 眼睛耳朵有滿滿的驚喜!"
   },
   {
     title: "Michael",
     poster: "posters/michael.jpg",
     date: "2026-04-22",
-    rating: 7.5,
+    rating: 7.2,
     review: "就像聽了一場MJ的演唱會"
   },
   {
@@ -53,20 +53,20 @@ const movies = [
     poster: "posters/wuthering-heights.jpg",
     date: "2026-02-28",
     rating: 7.3,
-    review: "很喜歡這種文學經典的改編, 提醒自己有空記得看小說"
+    review: "電影的風格跟美感很符合我的胃口"
   },
   {
     title: "Mother Mary",
     poster: "posters/mother-mary.jpg",
     date: "2026-04-17",
-    rating: 7.3,
-    review: "友情,親情還有自我的意象思考, 畫面很唯美 "
+    rating: 7.5,
+    review: "用鬼魅詮釋友情,親情和自我意象, 畫面很唯美喜歡 "
   },
   {
     title: "陽光女子合唱團",
     poster: "posters/sunny-girls.jpg",
     date: "2026-02-06",
-    rating: 7,
+    rating: 7.2,
     review: "抱著眼淚看完的一部片, 很想哭"
   },
   {

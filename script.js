@@ -1,162 +1,111 @@
-const grid = document.querySelector("#movieGrid");
-const searchInput = document.querySelector("#searchInput");
-const filterButtons = document.querySelectorAll(".filter");
-const dialog = document.querySelector("#movieDialog");
-const dialogContent = document.querySelector("#dialogContent");
-const closeDialog = document.querySelector("#closeDialog");
-
 let currentFilter = "all";
+let currentSlide = 0;
+let carouselTimer = null;
 
 function slugifyTitle(title) {
-  return title
-    .toLowerCase()
-    .replace(/['’]/g, "")
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return title.toLowerCase().replace(/['’]/g, "").replace(/&/g, "and").replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-+|-+$/g, "");
+}
+function posterPath(movie) { return movie.poster || `posters/${slugifyTitle(movie.title)}.jpg`; }
+function posterImage(movie) { return `<img src="${posterPath(movie)}" alt="${movie.title} poster" loading="lazy" onerror="this.classList.add('is-missing')" />`; }
+function getWatchedMovies() { return movies.filter(movie => typeof movie.rating === "number" && movie.rating > 0); }
+function getTopFive() { return [...getWatchedMovies()].sort((a, b) => b.rating - a.rating).slice(0, 5); }
+
+function updateStats() {
+  const watched = getWatchedMovies();
+  const avg = watched.reduce((sum, movie) => sum + movie.rating, 0) / (watched.length || 1);
+  const highest = watched.reduce((max, movie) => Math.max(max, movie.rating), 0);
+  document.getElementById("movieCount").textContent = watched.length;
+  document.getElementById("averageRating").textContent = avg.toFixed(1);
+  document.getElementById("highestRating").textContent = highest.toFixed(1);
 }
 
-function posterPath(movie) {
-  return movie.poster || `posters/${slugifyTitle(movie.title)}.jpg`;
-}
-
-function posterHTML(movie, extraClass = "") {
-  const tone = movie.posterTone || "mono";
-  return `
-    <div class="poster-wrap poster-${tone} ${extraClass}">
-      <img src="${posterPath(movie)}" alt="${movie.title} poster" loading="lazy" onerror="this.classList.add('is-missing')" />
-      <span>${movie.title}</span>
-    </div>
-  `;
-}
-
-
-function scoreClass(rating) {
-  if (rating >= 9) return "score legendary";
-  if (rating >= 8) return "score great";
-  if (rating >= 7) return "score good";
-  return "score low";
-}
-
-function renderStats() {
-  const total = movies.length;
-  const avg = movies.reduce((sum, movie) => sum + movie.rating, 0) / total;
-  const waitCount = juneWatchlist.filter(item => !item.done).length;
-
-  document.querySelector("#totalMovies").textContent = total;
-  document.querySelector("#avgRating").textContent = avg.toFixed(1);
-  document.querySelector("#watchlistCount").textContent = waitCount;
-}
-
-function renderSchedule() {
-  document.querySelector("#scheduleList").innerHTML = schedule.map(item => `
-    <article class="schedule-card">
+function renderTopFive() {
+  const top = getTopFive();
+  const carousel = document.getElementById("topCarousel");
+  const dots = document.getElementById("carouselDots");
+  carousel.innerHTML = `<div class="top-track">${top.map((movie, index) => `
+    <article class="top-slide">
+      <div class="top-poster">${posterImage(movie)}</div>
       <div>
-        <p class="date-text">${item.date}</p>
-        <h3>${item.time}</h3>
-      </div>
-      <div>
-        <p>${item.place}</p>
-        <span class="pill">$${item.price}</span>
-      </div>
-      <small>${item.note}</small>
-    </article>
-  `).join("");
-}
-
-function renderJune() {
-  document.querySelector("#juneList").innerHTML = juneWatchlist.map(item => `
-    <article class="check-item ${item.done ? "done" : ""}">
-      <span>${item.done ? "✓" : ""}</span>
-      <div>
-        <p>${item.date}</p>
-        <h3>${item.title}</h3>
-      </div>
-    </article>
-  `).join("");
-
-  document.querySelector("#budgetList").innerHTML = budgetList.map((item, index) => `
-    <article class="budget-item">
-      <span>${String(index + 1).padStart(2, "0")}</span>
-      <div>
-        <p>${item.date}</p>
-        <h3>${item.title}</h3>
-        ${item.note ? `<small>${item.note}</small>` : ""}
-      </div>
-    </article>
-  `).join("");
-}
-
-function renderTopList() {
-  const topFive = [...movies].sort((a, b) => b.rating - a.rating).slice(0, 5);
-  document.querySelector("#topList").innerHTML = topFive.map((movie, index) => `
-    <article class="top-row" onclick="openMovie(${movies.indexOf(movie)})">
-      <span class="rank">#${index + 1}</span>
-      <div>
+        <p class="top-rank">No. ${index + 1}</p>
         <h3>${movie.title}</h3>
-        <p>${movie.date} · ${movie.review || "尚未寫心得"}</p>
+        <span class="rating">${movie.rating.toFixed(1)}</span>
+        <p class="review">${movie.review || "No notes yet."}</p>
       </div>
-      <strong>${movie.rating}</strong>
-    </article>
-  `).join("");
+    </article>`).join("")}</div>`;
+  dots.innerHTML = top.map((_, index) => `<button class="${index === 0 ? "active" : ""}" data-slide="${index}" aria-label="Go to slide ${index + 1}"></button>`).join("");
+  dots.querySelectorAll("button").forEach(button => button.addEventListener("click", () => {
+    currentSlide = Number(button.dataset.slide); updateCarousel(); restartCarousel();
+  }));
+  document.querySelector(".prev").addEventListener("click", () => {
+    currentSlide = (currentSlide - 1 + top.length) % top.length; updateCarousel(); restartCarousel();
+  });
+  document.querySelector(".next").addEventListener("click", () => {
+    currentSlide = (currentSlide + 1) % top.length; updateCarousel(); restartCarousel();
+  });
+  startCarousel();
 }
+
+function updateCarousel() {
+  const track = document.querySelector(".top-track");
+  const dots = document.querySelectorAll(".carousel-dots button");
+  if (!track) return;
+  track.style.transform = `translateX(-${currentSlide * 100}%)`;
+  dots.forEach((dot, index) => dot.classList.toggle("active", index === currentSlide));
+}
+function startCarousel() {
+  const topLength = getTopFive().length;
+  if (topLength <= 1) return;
+  carouselTimer = setInterval(() => {
+    currentSlide = (currentSlide + 1) % topLength; updateCarousel();
+  }, 3600);
+}
+function restartCarousel() { clearInterval(carouselTimer); startCarousel(); }
 
 function renderMovies() {
-  const keyword = searchInput.value.trim().toLowerCase();
-
-  const filtered = movies.filter(movie => {
-    const matchesFilter = currentFilter === "all" || movie.tags.includes(currentFilter);
-    const searchable = `${movie.title} ${movie.date} ${movie.rating} ${movie.review}`.toLowerCase();
-    return matchesFilter && searchable.includes(keyword);
-  });
-
+  const grid = document.getElementById("movieGrid");
+  const keyword = document.getElementById("searchInput").value.trim().toLowerCase();
+  let filtered = movies.filter(movie => {
+    const matchesKeyword = movie.title.toLowerCase().includes(keyword) || (movie.review || "").toLowerCase().includes(keyword);
+    const isWatched = typeof movie.rating === "number" && movie.rating > 0;
+    if (currentFilter === "top") return matchesKeyword && isWatched && movie.rating >= 8;
+    if (currentFilter === "watched") return matchesKeyword && isWatched;
+    return matchesKeyword;
+  }).sort((a, b) => (b.rating || 0) - (a.rating || 0));
   grid.innerHTML = filtered.map(movie => `
-    <article class="movie-card" onclick="openMovie(${movies.indexOf(movie)})">
-      ${posterHTML(movie)}
+    <article class="movie-card" data-title="${movie.title}">
+      <div class="poster-wrap">${posterImage(movie)}</div>
       <div class="movie-info">
-        <p>${movie.date}</p>
         <h3>${movie.title}</h3>
-        <div class="${scoreClass(movie.rating)}">${movie.rating}</div>
-        <p class="mini-review">${movie.review || "尚未寫心得"}</p>
+        <div class="movie-meta"><span>${movie.date || "TBA"}</span><span>${movie.rating ? movie.rating.toFixed(1) : "TBA"}</span></div>
+        <p class="mini-review">${movie.review || "No notes yet."}</p>
       </div>
-    </article>
-  `).join("");
+    </article>`).join("");
+  document.querySelectorAll(".movie-card").forEach(card => {
+    card.addEventListener("click", () => openDialog(movies.find(item => item.title === card.dataset.title)));
+  });
 }
 
-function openMovie(index) {
-  const movie = movies[index];
-  dialogContent.innerHTML = `
+function openDialog(movie) {
+  const dialog = document.getElementById("movieDialog");
+  document.getElementById("dialogContent").innerHTML = `
     <div class="dialog-layout">
-      ${posterHTML(movie)}
+      <div class="poster-wrap">${posterImage(movie)}</div>
       <div>
-        <p class="eyebrow">${movie.date}</p>
-        <h2>${movie.title}</h2>
-        <div class="${scoreClass(movie.rating)}">${movie.rating}</div>
-        <p class="review">${movie.review || "這部還沒有補心得。"}</p>
+        <p class="eyebrow">Film notes</p>
+        <h3>${movie.title}</h3>
+        <span class="rating">${movie.rating ? movie.rating.toFixed(1) : "TBA"}</span>
+        <p class="review">${movie.review || "No notes yet."}</p>
+        <p class="movie-meta">${movie.date || "TBA"}</p>
       </div>
-    </div>
-  `;
+    </div>`;
   dialog.showModal();
 }
 
-filterButtons.forEach(button => {
-  button.addEventListener("click", () => {
-    filterButtons.forEach(btn => btn.classList.remove("active"));
-    button.classList.add("active");
-    currentFilter = button.dataset.filter;
-    renderMovies();
-  });
-});
-
-searchInput.addEventListener("input", renderMovies);
-closeDialog.addEventListener("click", () => dialog.close());
-
-dialog.addEventListener("click", event => {
-  if (event.target === dialog) dialog.close();
-});
-
-renderStats();
-renderSchedule();
-renderJune();
-renderTopList();
-renderMovies();
+document.getElementById("closeDialog").addEventListener("click", () => document.getElementById("movieDialog").close());
+document.getElementById("searchInput").addEventListener("input", renderMovies);
+document.querySelectorAll(".filter").forEach(button => button.addEventListener("click", () => {
+  document.querySelectorAll(".filter").forEach(item => item.classList.remove("active"));
+  button.classList.add("active"); currentFilter = button.dataset.filter; renderMovies();
+}));
+updateStats(); renderTopFive(); renderMovies();

@@ -1,115 +1,63 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Movie List | Cinema Diary</title>
+  <title>LU Cinema Diary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="grain"></div>
   <header class="hero">
     <nav>
-      <div class="logo">Movie List</div>
+      <a class="brand" href="#">LU Cinema Diary</a>
       <div class="nav-links">
-        <a href="#schedule">Schedule</a>
-        <a href="#june">June</a>
-        <a href="#top">Top 5</a>
-        <a href="#reviews">Reviews</a>
+        <a href="#top-five">Top Five</a>
+        <a href="#diary">Diary</a>
       </div>
     </nav>
-
-    <section class="hero-content">
-      <p class="eyebrow">竑宇的電影手帳</p>
-      <h1>把想看的、看完的、還留在心裡的都收起來。</h1>
-      <p class="subtitle">私人電影紀錄頁：片單、預算、場次、Top 5 與短心得。分享連結給別人就能看。</p>
-      <div class="hero-actions">
-        <a class="primary-btn" href="#reviews">看心得</a>
-        <a class="ghost-btn" href="#june">6月片單</a>
-      </div>
+    <section class="hero-copy">
+      <p class="eyebrow">Personal film archive</p>
+      <h1>Films I watched,<br>kept, and remembered.</h1>
+      <p class="subtitle">A quiet movie journal for ratings, posters, and small fragments of feeling after each screening.</p>
+      <a class="cta" href="#diary">Enter diary</a>
     </section>
   </header>
-
   <main>
-    <section id="stats" class="stats-grid">
-      <div class="stat-card">
-        <span id="totalMovies">0</span>
-        <p>已紀錄電影</p>
-      </div>
-      <div class="stat-card">
-        <span id="avgRating">0</span>
-        <p>平均評分</p>
-      </div>
-      <div class="stat-card">
-        <span id="watchlistCount">0</span>
-        <p>6月待看</p>
-      </div>
+    <section class="stats panel">
+      <div><span id="movieCount">0</span><p>Films logged</p></div>
+      <div><span id="averageRating">0.0</span><p>Average rating</p></div>
+      <div><span id="highestRating">0.0</span><p>Highest score</p></div>
     </section>
-
-    <section id="schedule" class="panel">
-      <div class="section-title">
-        <p class="eyebrow">Schedule</p>
-        <h2>最近場次</h2>
+    <section id="top-five" class="panel top-five-section">
+      <div class="section-head"><p class="eyebrow">Ranked selection</p><h2>Top Five List</h2></div>
+      <div class="carousel-shell">
+        <button class="carousel-btn prev" aria-label="Previous top movie">‹</button>
+        <div id="topCarousel" class="top-carousel"></div>
+        <button class="carousel-btn next" aria-label="Next top movie">›</button>
       </div>
-      <div id="scheduleList" class="schedule-list"></div>
+      <div id="carouselDots" class="carousel-dots"></div>
     </section>
-
-    <section id="june" class="two-column">
-      <div class="panel">
-        <div class="section-title">
-          <p class="eyebrow">June Watchlist</p>
-          <h2>6月要看</h2>
-        </div>
-        <div id="juneList" class="check-list"></div>
+    <section id="diary" class="panel diary-section">
+      <div class="section-head split">
+        <div><p class="eyebrow">Archive</p><h2>Movie Diary</h2></div>
+        <input id="searchInput" type="search" placeholder="Search films..." />
       </div>
-
-      <div class="panel budget-panel">
-        <div class="section-title">
-          <p class="eyebrow">Budget Mode</p>
-          <h2>6月考慮</h2>
-          <p class="muted">預算有限，最多兩部。</p>
-        </div>
-        <div id="budgetList" class="budget-list"></div>
+      <div class="filters">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="top">Top rated</button>
+        <button class="filter" data-filter="watched">Watched</button>
       </div>
+      <div id="movieGrid" class="movie-grid"></div>
     </section>
-
-    <section id="top" class="panel">
-      <div class="section-title split">
-        <div>
-          <p class="eyebrow">Tier List</p>
-          <h2>Top 5</h2>
-        </div>
-        <p class="muted">目前最喜歡的五部</p>
-      </div>
-      <div id="topList" class="top-list"></div>
-    </section>
-
-    <section id="reviews" class="section-head">
-      <div>
-        <p class="eyebrow">Reviews</p>
-        <h2>心得紀錄</h2>
-      </div>
-      <input id="searchInput" type="text" placeholder="搜尋電影名稱、日期、心得..." />
-    </section>
-
-    <section class="filters">
-      <button class="filter active" data-filter="all">全部</button>
-      <button class="filter" data-filter="favorite">最愛</button>
-      <button class="filter" data-filter="high">8分以上</button>
-      <button class="filter" data-filter="watched">已看</button>
-    </section>
-
-    <section id="movieGrid" class="movie-grid"></section>
   </main>
-
   <dialog id="movieDialog">
     <button id="closeDialog" class="close-btn">×</button>
     <div id="dialogContent"></div>
   </dialog>
-
-  <footer>
-    <p>Made with movies, memories, and a little bit of code.</p>
-  </footer>
-
   <script src="movies.js"></script>
   <script src="script.js"></script>
 </body>

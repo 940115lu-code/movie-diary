@@ -21,8 +21,11 @@ function posterImage(movie) {
 
 function getScoreClass(rating) {
   if (!rating) return "score-empty";
+
   if (rating >= 9) return "score-master";
   if (rating >= 7) return "score-good";
+  if (rating >= 6) return "score-mid";
+
   return "score-low";
 }
 

@@ -17,3 +17,37 @@ main{width:min(1160px,calc(100% - 34px));margin:-78px auto 70px;display:grid;gap
 .movie-info{padding:14px}.movie-info h3{font-family:"Inter",system-ui,sans-serif;font-size:.98rem;line-height:1.35;letter-spacing:-.02em}.movie-meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:.82rem;margin-top:8px}.mini-review{color:var(--faint);font-size:.82rem;line-height:1.55;margin:10px 0 0}
 dialog{border:1px solid var(--line);border-radius:30px;background:rgba(4,10,14,.84);color:var(--text);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);box-shadow:var(--shadow);width:min(820px,94vw)}dialog::backdrop{background:rgba(0,0,0,.62);backdrop-filter:blur(8px)}.close-btn{position:absolute;right:14px;top:12px;border:0;background:transparent;color:var(--muted);font-size:2rem;cursor:pointer}.dialog-layout{display:grid;grid-template-columns:230px 1fr;gap:28px;padding:28px}.dialog-layout h3{font-size:clamp(2.2rem,6vw,4rem);margin-bottom:12px}
 @media(max-width:760px){.hero{min-height:76vh;padding:22px 18px 96px}nav{align-items:flex-start;flex-direction:column}.nav-links{width:100%;overflow-x:auto}.hero-copy{margin-top:11vh}h1{font-size:clamp(3.05rem,16vw,5rem)}main{width:min(100% - 22px,1160px);margin-top:-64px}.panel{border-radius:24px;padding:18px}.stats{grid-template-columns:1fr}.stats div{padding:18px}.split{align-items:stretch;flex-direction:column}.carousel-shell{grid-template-columns:1fr}.carousel-btn{display:none}.top-slide{grid-template-columns:1fr}.top-poster{width:min(70vw,280px);justify-self:center}.movie-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.movie-card{border-radius:18px}.poster-wrap{border-radius:18px}.movie-info{padding:12px}.dialog-layout{grid-template-columns:1fr;padding:24px 18px}.dialog-layout .poster-wrap{width:min(70vw,250px);justify-self:center}}
+
+.hero h1 {
+  color: rgba(245, 252, 255, 0.95);
+}
+
+.movie-meta span:last-child {
+  font-size: 1.35rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+/* 9+ */
+.movie-card:has(.movie-meta span:last-child)::after {
+  content: "";
+}
+
+/* 用 JS 加分數等級會更準 */
+.score-master {
+  color: #031014;
+  background: #79e7ff;
+}
+
+.score-good {
+  color: #79e7ff;
+  background: rgba(121, 231, 255, 0.12);
+  border: 1px solid rgba(121, 231, 255, 0.35);
+}
+
+.score-low {
+  color: rgba(255, 180, 180, 0.95);
+  background: rgba(255, 120, 120, 0.12);
+  border: 1px solid rgba(255, 120, 120, 0.25);
+}

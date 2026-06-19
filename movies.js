@@ -18,7 +18,7 @@ const movies = [
     poster: "posters/the-drama.jpg",
     date: "2026-04-02",
     rating: 8.8,
-    review: "讓人思考很久的人生課題, 音樂和拍攝手法都很符合我的胃口"
+    review: "值得思考的愛情課題, 音樂和拍攝手法完全合我的胃口"
   },
   {
     title: "Backroom",

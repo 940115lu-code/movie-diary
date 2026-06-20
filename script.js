@@ -141,8 +141,10 @@ function renderMovies() {
 
     const isWatched = typeof movie.rating === "number" && movie.rating > 0;
 
-    if (currentFilter === "top") return matchesKeyword && isWatched && movie.rating >= 8;
-    if (currentFilter === "watched") return matchesKeyword && isWatched;
+    if (currentFilter === "masterpiece") return matchesKeyword && isWatched && movie.rating >= 9;
+    if (currentFilter === "great") return matchesKeyword && isWatched && movie.rating >= 7 && movie.rating < 9;
+    if (currentFilter === "mid") return matchesKeyword && isWatched && movie.rating >= 6 && movie.rating < 7;
+    if (currentFilter === "low") return matchesKeyword && isWatched && movie.rating < 6;
 
     return matchesKeyword;
   }).sort((a, b) => (b.rating || 0) - (a.rating || 0));

@@ -13,7 +13,7 @@
   <div class="grain"></div>
   <header class="hero">
     <nav>
-      <a class="brand" href="#">LU Cinema Diary</a>
+      <a class="brand" href="#">LU‘s Cinema Diary</a>
       <div class="nav-links">
         <a href="#top-five">Top Five</a>
         <a href="#diary">Diary</a>
@@ -21,16 +21,33 @@
     </nav>
     <section class="hero-copy">
       <p class="eyebrow">Personal film archive</p>
-      <h1>Films I watched,<br>kept, and remembered.</h1>
-      <p class="subtitle">A quiet movie journal for ratings, posters, and small fragments of feeling after each screening.</p>
+      <h1>
+        Petit à petit,<br>
+        tracking your own journey.<br>
+      </h1>
+
+      <p class="subtitle">
+         A quiet movie journal for ratings, posters, and small fragments of feeling after each screening.
+      </p>
       <a class="cta" href="#diary">Enter diary</a>
     </section>
   </header>
   <main>
     <section class="stats panel">
-      <div><span id="movieCount">0</span><p>Films logged</p></div>
-      <div><span id="averageRating">0.0</span><p>Average rating</p></div>
-      <div><span id="highestRating">0.0</span><p>Highest score</p></div>
+      <div>
+        <p>Films Logged</p>
+        <span id="movieCount">0</span>
+      </div>
+
+      <div>
+        <p>Average Rating</p>
+        <span id="averageRating">0.0</span>
+      </div>
+
+      <div>
+        <p>Highest Score</p>
+        <span id="highestRating">0.0</span>
+      </div>
     </section>
     <section id="top-five" class="panel top-five-section">
       <div class="section-head"><p class="eyebrow">Ranked selection</p><h2>Top Five List</h2></div>
@@ -47,9 +64,23 @@
         <input id="searchInput" type="search" placeholder="Search films..." />
       </div>
       <div class="filters">
-        <button class="filter active" data-filter="all">All</button>
-        <button class="filter" data-filter="top">Top rated</button>
-        <button class="filter" data-filter="watched">Watched</button>
+        <button class="filter active" data-filter="all">All Films</button>
+
+        <button class="filter" data-filter="masterpiece">
+            Masterpiece
+        </button>
+
+        <button class="filter" data-filter="great">
+            Recommended
+        </button>
+
+        <button class="filter" data-filter="mid">
+            Average
+        </button>
+
+        <button class="filter" data-filter="low">
+            Disappointing
+        </button>
       </div>
       <div id="movieGrid" class="movie-grid"></div>
     </section>

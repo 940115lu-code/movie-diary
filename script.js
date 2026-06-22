@@ -23,12 +23,13 @@ function posterPath(movie) {
   return movie.poster || `posters/${slugifyTitle(movie.title)}.jpg`;
 }
 
-function posterImage(movie) {
+function posterImage(movie, eager = false) {
   return `
     <img
       src="${posterPath(movie)}"
       alt="${movie.title} poster"
-      loading="lazy"
+      loading="${eager ? "eager" : "lazy"}"
+      decoding="async"
       onerror="this.classList.add('is-missing')"
     />
   `;
@@ -63,12 +64,20 @@ function hypeStars(hype) {
 
 function parseMovieDate(dateText) {
   const timestamp = Date.parse(dateText);
+  return Number.isNaN(timestamp) ? Infinity : timestamp;
+}
 
-  if (Number.isNaN(timestamp)) {
-    return Infinity;
-  }
+function fitMovieTitles() {
+  document.querySelectorAll(".movie-info h3").forEach(title => {
+    let size = 16;
 
-  return timestamp;
+    title.style.fontSize = size + "px";
+
+    while (title.scrollWidth > title.clientWidth && size > 11) {
+      size--;
+      title.style.fontSize = size + "px";
+    }
+  });
 }
 
 /* =========================
@@ -141,10 +150,10 @@ function renderUpcoming() {
 
   carousel.innerHTML = `
     <div class="upcoming-track">
-      ${sortedUpcoming.map(movie => `
+      ${sortedUpcoming.map((movie, index) => `
         <article class="top-slide">
           <div class="top-poster">
-            ${posterImage(movie)}
+            ${posterImage(movie, index === 0)}
           </div>
 
           <div>
@@ -211,7 +220,6 @@ function updateUpcomingCarousel(total = getSortedUpcomingMovies().length) {
   if (!track || total <= 0) return;
 
   upcomingSlide = upcomingSlide % total;
-
   track.style.transform = `translateX(-${upcomingSlide * 100}%)`;
 
   dots.forEach((dot, index) => {
@@ -247,7 +255,7 @@ function renderTopFive() {
       ${top.map((movie, index) => `
         <article class="top-slide">
           <div class="top-poster">
-            ${posterImage(movie)}
+            ${posterImage(movie, index === 0)}
           </div>
 
           <div>
@@ -397,25 +405,8 @@ function renderMovies() {
       openDialog(movie);
     });
   });
-  
-/*hhhhhhhhhh
-  
-*/
-document.querySelectorAll(".movie-info h3").forEach(title => {
 
-  let size = 16;
-
-  title.style.fontSize = size + "px";
-
-  while (
-    title.scrollWidth > title.clientWidth &&
-    size > 11
-  ) {
-    size--;
-    title.style.fontSize = size + "px";
-  }
-
-});
+  fitMovieTitles();
 }
 
 /* =========================

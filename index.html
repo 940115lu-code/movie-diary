@@ -1,38 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Basic settings -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>LU Cinema Diary</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="grain"></div>
+
+  <!-- =========================
+       Hero
+  ========================== -->
   <header class="hero">
     <nav>
-      <a class="brand" href="#">LU‘s Cinema Diary</a>
+      <a class="brand" href="#">LU's Cinema Diary</a>
+
       <div class="nav-links">
+        <a href="#upcoming">Upcoming</a>
         <a href="#top-five">Top Five</a>
         <a href="#diary">Diary</a>
       </div>
     </nav>
+
     <section class="hero-copy">
       <p class="eyebrow">Personal film archive</p>
+
       <h1>
-        Petit à petit,<br>
-        tracking your own journey.<br>
+        Petit à petit,<br />
+        tracking your own journey.
       </h1>
 
       <p class="subtitle">
-         A quiet movie journal for ratings, posters, and small fragments of feeling after each screening.
+        A quiet movie journal for ratings, posters, and small fragments of feeling after each screening.
       </p>
+
       <a class="cta" href="#diary">Enter diary</a>
     </section>
   </header>
+
   <main>
+    <!-- =========================
+         Stats
+    ========================== -->
     <section class="stats panel">
       <div>
         <p>Films Logged</p>
@@ -49,46 +72,113 @@
         <span id="highestRating">0.0</span>
       </div>
     </section>
-    <section id="top-five" class="panel top-five-section">
-      <div class="section-head"><p class="eyebrow">Ranked selection</p><h2>Top Five List</h2></div>
-      <div class="carousel-shell">
-        <button class="carousel-btn prev" aria-label="Previous top movie">‹</button>
-        <div id="topCarousel" class="top-carousel"></div>
-        <button class="carousel-btn next" aria-label="Next top movie">›</button>
+
+    <!-- =========================
+         Upcoming Screenings
+    ========================== -->
+    <section id="upcoming" class="panel top-five-section">
+      <div class="section-head">
+        <p class="eyebrow">Coming soon</p>
+        <h2>Upcoming Screenings</h2>
       </div>
+
+      <div class="carousel-shell">
+        <button
+          class="carousel-btn upcoming-prev"
+          aria-label="Previous upcoming movie"
+        >
+          ‹
+        </button>
+
+        <div id="upcomingCarousel" class="top-carousel"></div>
+
+        <button
+          class="carousel-btn upcoming-next"
+          aria-label="Next upcoming movie"
+        >
+          ›
+        </button>
+      </div>
+
+      <div id="upcomingDots" class="carousel-dots"></div>
+    </section>
+
+    <!-- =========================
+         Top Five
+    ========================== -->
+    <section id="top-five" class="panel top-five-section">
+      <div class="section-head">
+        <p class="eyebrow">Ranked selection</p>
+        <h2>Top Five List</h2>
+      </div>
+
+      <div class="carousel-shell">
+        <button class="carousel-btn prev" aria-label="Previous top movie">
+          ‹
+        </button>
+
+        <div id="topCarousel" class="top-carousel"></div>
+
+        <button class="carousel-btn next" aria-label="Next top movie">
+          ›
+        </button>
+      </div>
+
       <div id="carouselDots" class="carousel-dots"></div>
     </section>
+
+    <!-- =========================
+         Movie Diary
+    ========================== -->
     <section id="diary" class="panel diary-section">
       <div class="section-head split">
-        <div><p class="eyebrow">Archive</p><h2>Movie Diary</h2></div>
-        <input id="searchInput" type="search" placeholder="Search films..." />
+        <div>
+          <p class="eyebrow">Archive</p>
+          <h2>Movie Diary</h2>
+        </div>
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search films..."
+        />
       </div>
+
       <div class="filters">
-        <button class="filter active" data-filter="all">All Films</button>
+        <button class="filter active" data-filter="all">
+          All Films
+        </button>
 
         <button class="filter" data-filter="masterpiece">
-            Masterpiece
+          Masterpiece
         </button>
 
         <button class="filter" data-filter="great">
-            Recommended
+          Recommended
         </button>
 
         <button class="filter" data-filter="mid">
-            Average
+          Average
         </button>
 
         <button class="filter" data-filter="low">
-            Disappointing
+          Disappointing
         </button>
       </div>
+
       <div id="movieGrid" class="movie-grid"></div>
     </section>
   </main>
+
+  <!-- =========================
+       Movie Detail Dialog
+  ========================== -->
   <dialog id="movieDialog">
     <button id="closeDialog" class="close-btn">×</button>
     <div id="dialogContent"></div>
   </dialog>
+
+  <!-- Scripts -->
   <script src="movies.js"></script>
   <script src="script.js"></script>
 </body>
